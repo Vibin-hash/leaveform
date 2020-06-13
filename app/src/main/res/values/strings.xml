@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">LeaveForm</string>
+
+    <array name="depts">
+        <item>CSE</item>
+        <item>ECE</item>
+        <item>CCE</item>
+        <item>EEE</item>
+        <item>MECH</item>
+        <item>IT</item>
+    </array>
+</resources>
