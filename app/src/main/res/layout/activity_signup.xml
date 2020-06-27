@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".SignupActivity"
     android:orientation="vertical"
-    android:layout_marginRight="10dp"
-    android:layout_marginLeft="10dp"
     android:background="#fff">
 
     <ScrollView
@@ -16,7 +14,7 @@
         
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
 
@@ -27,11 +25,13 @@
         android:layout_gravity="center"
         android:textSize="40sp"
         android:fontFamily="sans-serif"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="40dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Signup"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
 
         android:textSize="16sp"
         />
@@ -41,6 +41,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="65dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:hint="Full name">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -57,6 +59,8 @@
         android:layout_marginBottom="5dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="Username"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:id="@+id/signup_username">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -68,7 +72,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="Email"
         android:id="@+id/signup_Email">
@@ -84,6 +89,8 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="Password"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         app:passwordToggleEnabled="true"
         android:id="@+id/signup_password">
         <com.google.android.material.textfield.TextInputEditText
@@ -98,6 +105,8 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="Phone No."
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:id="@+id/signup_phno">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -106,6 +115,95 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/epdept"
+                    android:layout_gravity="center_vertical"
+                    android:text="Department : "
+                    android:textSize="18sp"
+                    android:paddingLeft="30dp" />
+
+                <Spinner
+                    android:layout_width="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/suspinner1"
+                    android:background="@drawable/outlineforspinner"/>
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Year :"
+                    android:textSize="18sp"
+                    android:paddingLeft="25dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="165dp"
+                    android:textSize="18sp"
+                    android:text="Semester :" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:layout_weight="1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/suyearspinner"
+                    android:layout_gravity="top"
+                    android:background="@drawable/outlineforspinner"/>
+
+                <Spinner
+                    android:layout_weight="1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:paddingRight="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/susemspinner"
+                    android:layout_gravity="top"
+                    android:background="@drawable/outlineforspinner"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
     <Button
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
@@ -113,6 +211,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:textColor="#fff"
         android:background="#000"
         />

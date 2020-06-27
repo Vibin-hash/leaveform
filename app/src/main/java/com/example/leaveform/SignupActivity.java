@@ -1,15 +1,23 @@
 package com.example.leaveform;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Trace;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,7 +26,8 @@ public class SignupActivity extends AppCompatActivity {
     TextView backtologin;
     TextInputLayout regfullname,regusername,regemail,regpassword,regphno;
     Button register;
-
+    String name,password,email,username,phoneno;
+    FirebaseAuth mAuth;
     FirebaseDatabase rootnode;
     DatabaseReference reference;
     @Override
@@ -26,6 +35,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        mAuth=FirebaseAuth.getInstance();
         backtologin=(TextView)findViewById(R.id.signup_gotologinpage);
         backtologin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,19 +63,49 @@ public class SignupActivity extends AppCompatActivity {
                 {
                     return;
                 }
-                String name =regfullname.getEditText().getText().toString();
-                String username=regusername.getEditText().getText().toString();
-                String email=regemail.getEditText().getText().toString();
-                String password=regpassword.getEditText().getText().toString();
-                String phoneno=regphno.getEditText().getText().toString();
+
+                name =regfullname.getEditText().getText().toString();
+                username=regusername.getEditText().getText().toString();
+                email=regemail.getEditText().getText().toString();
+                password=regpassword.getEditText().getText().toString();
+                phoneno=regphno.getEditText().getText().toString();
 
 
-                UserHelperClass helperClass=new UserHelperClass(name,username,email,phoneno,password);
-                reference.child(username).setValue(helperClass);
+
+
+
+
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    assert user != null;
+
+                                    String userUid=user.getUid();
+                                    UserHelperClass helperClass=new UserHelperClass(name,username,email,phoneno,password);
+                                    reference.child(userUid).setValue(helperClass);
+
+                                    startActivity(new Intent(SignupActivity.this,LeaveformActivity.class));
+                                    finish();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                                // ...
+                            }
+                        });
+
+
             }
         });
 
     }
+
 
     private Boolean validateName()
     {

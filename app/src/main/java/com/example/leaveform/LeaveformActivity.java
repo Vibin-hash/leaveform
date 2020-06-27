@@ -9,24 +9,33 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
 public class LeaveformActivity extends AppCompatActivity {
 
 
+    FirebaseDatabase database;
+    DatabaseReference ref;
+    Button save;
+
     private static final String TAG = "LeaveformActivity";
     private TextInputEditText from,to;
+    private String fromDate,toDate;
     private DatePickerDialog.OnDateSetListener dateSetListener1,dateSetListener2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaveform);
 
+        save=findViewById(R.id.btn_save);
         from=findViewById(R.id.lffrom);
         to=findViewById(R.id.lfto);
 
@@ -55,6 +64,7 @@ public class LeaveformActivity extends AppCompatActivity {
                 Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
 
                 String date = day+"/" + month + "/" + year;
+                toDate=date;
                 from.setText(date);
             }
         };
@@ -82,16 +92,21 @@ public class LeaveformActivity extends AppCompatActivity {
                 Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + dayOfMonth + "/" + year);
 
                 String date = dayOfMonth+ "/" + month + "/" + year;
+                fromDate=date;
                 to.setText(date);
             }
         };
 
 
-        Spinner spinner=(Spinner)findViewById(R.id.spinner1);
-        ArrayAdapter<String> myAdapter= new ArrayAdapter<String>(LeaveformActivity.this,
-                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.depts));
-        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(myAdapter);
+        ref=FirebaseDatabase.getInstance().getReference().child("leavehistory");
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ref.child("1234").child("From").setValue(fromDate);
+                ref.child("1234").child("To").setValue(toDate);
+            }
+        });
+
 
     }
 }
