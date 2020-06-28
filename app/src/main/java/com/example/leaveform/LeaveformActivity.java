@@ -156,7 +156,6 @@ public class LeaveformActivity extends AppCompatActivity {
                                     leaveCount=dataSnapshot.getValue().toString();
                                     temp=Integer.parseInt(leaveCount);
                                     temp=temp+diff;
-
                                     countRef.setValue(temp);
 
                                 }
