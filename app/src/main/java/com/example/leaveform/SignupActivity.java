@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     String name,password,email,username,phoneno;
     FirebaseAuth mAuth;
     FirebaseDatabase rootnode;
-    DatabaseReference reference;
+    DatabaseReference reference,serialref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +57,8 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 rootnode=FirebaseDatabase.getInstance();
+
+
                 reference = rootnode.getReference("users");
 
                 if(!validateName() | !validateEmail() | !validatePassword() | !validatePhno() | !validateUserName() )
@@ -72,9 +74,6 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-
-
-
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -87,6 +86,9 @@ public class SignupActivity extends AppCompatActivity {
                                     String userUid=user.getUid();
                                     UserHelperClass helperClass=new UserHelperClass(name,username,email,phoneno,password);
                                     reference.child(userUid).setValue(helperClass);
+
+                                    serialref=FirebaseDatabase.getInstance().getReference().child("serialNumber");
+                                    serialref.child(userUid).setValue(0);
 
                                     startActivity(new Intent(SignupActivity.this,LeaveformActivity.class));
                                     finish();

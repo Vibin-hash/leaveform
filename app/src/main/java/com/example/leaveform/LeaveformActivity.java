@@ -1,5 +1,6 @@
     package com.example.leaveform;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -14,17 +15,25 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
 public class LeaveformActivity extends AppCompatActivity {
 
 
+    FirebaseAuth leaveAuth;
     FirebaseDatabase database;
-    DatabaseReference ref;
+    DatabaseReference ref,sRef,sRef2;
     Button save;
+    String strserialNo="1";
+    int sno;
 
     private static final String TAG = "LeaveformActivity";
     private TextInputEditText from,to;
@@ -97,13 +106,39 @@ public class LeaveformActivity extends AppCompatActivity {
             }
         };
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        final String uid=user.getUid();
 
-        ref=FirebaseDatabase.getInstance().getReference().child("leavehistory");
+
+        sRef=FirebaseDatabase.getInstance().getReference().child("serialNumber").child(uid);
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ref.child("1234").child("From").setValue(fromDate);
-                ref.child("1234").child("To").setValue(toDate);
+                sRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        strserialNo= dataSnapshot.getValue().toString();
+                        ref=FirebaseDatabase.getInstance().getReference().child("leavehistory");
+
+                        ref.child(uid).child(strserialNo).child("From").setValue(fromDate);
+                        ref.child(uid).child(strserialNo).child("To").setValue(toDate);
+                        sno=Integer.parseInt(strserialNo);
+                        sno=sno+1;
+                        sRef2=FirebaseDatabase.getInstance().getReference().child("serialNumber");
+                        sRef2.child(uid).setValue(sno);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
             }
         });
 
