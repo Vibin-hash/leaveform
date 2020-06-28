@@ -128,7 +128,6 @@ public class SignupActivity extends AppCompatActivity {
                 phoneno=regphno.getEditText().getText().toString();
 
 
-
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override

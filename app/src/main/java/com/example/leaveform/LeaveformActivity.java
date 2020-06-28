@@ -1,11 +1,15 @@
-    package com.example.leaveform;
+package com.example.leaveform;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.LocalDate;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,10 +35,15 @@ public class LeaveformActivity extends AppCompatActivity {
 
     FirebaseAuth leaveAuth;
     FirebaseDatabase database;
-    DatabaseReference ref,sRef,sRef2;
+    DatabaseReference ref,sRef,sRef2,countRef;
     Button save;
-    String strserialNo="1";
-    int sno;
+    String strserialNo="1",leaveCount,d;
+    long sno,temp,diff;
+
+
+    LocalDate datefrom,dateTo;
+
+    Counttheleave.Date dfrom,dto;
 
     private static final String TAG = "LeaveformActivity";
     private TextInputEditText from,to;
@@ -67,13 +77,15 @@ public class LeaveformActivity extends AppCompatActivity {
         });
 
         dateSetListener1 = new DatePickerDialog.OnDateSetListener() {
-            @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
 
-                String date = day+"/" + month + "/" + year;
-                toDate=date;
+                String date = day+"-" + month + "-" + year;
+
+                dfrom=new Counttheleave.Date(day,month,year);
+
+                fromDate=date;
                 from.setText(date);
             }
         };
@@ -96,12 +108,14 @@ public class LeaveformActivity extends AppCompatActivity {
 
         dateSetListener2=new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
-                Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + dayOfMonth + "/" + year);
+                Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
 
-                String date = dayOfMonth+ "/" + month + "/" + year;
-                fromDate=date;
+                String date = day+"-"+ month + "-" + year;
+                dto=new Counttheleave.Date(day,month,year);
+
+                toDate=date;
                 to.setText(date);
             }
         };
@@ -112,6 +126,7 @@ public class LeaveformActivity extends AppCompatActivity {
 
 
         sRef=FirebaseDatabase.getInstance().getReference().child("serialNumber").child(uid);
+        countRef=FirebaseDatabase.getInstance().getReference().child("leavehistory").child(uid).child("Totalleave");
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,14 +135,46 @@ public class LeaveformActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         strserialNo= dataSnapshot.getValue().toString();
+                        d= String.valueOf(Counttheleave.getDifference(dfrom,dto));
+                        diff=Integer.parseInt(d);
+
                         ref=FirebaseDatabase.getInstance().getReference().child("leavehistory");
 
                         ref.child(uid).child(strserialNo).child("From").setValue(fromDate);
                         ref.child(uid).child(strserialNo).child("To").setValue(toDate);
+
                         sno=Integer.parseInt(strserialNo);
+                        if(sno==0)
+                        {
+                            ref.child(uid).child("Totalleave").setValue(0);
+                        }
+                        else
+                        {
+                            countRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    leaveCount=dataSnapshot.getValue().toString();
+                                    temp=Integer.parseInt(leaveCount);
+                                    temp=temp+diff;
+
+                                    countRef.setValue(temp);
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+
+
                         sno=sno+1;
                         sRef2=FirebaseDatabase.getInstance().getReference().child("serialNumber");
                         sRef2.child(uid).setValue(sno);
+
+
+                        Toast.makeText(LeaveformActivity.this,d,Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -135,10 +182,6 @@ public class LeaveformActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-
-
             }
         });
 
