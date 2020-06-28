@@ -114,7 +114,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-                reference = rootnode.getReference("users");
+                reference = rootnode.getReference("users").child(selectedDesignation);
 
                 if(!validateName() | !validateEmail() | !validatePassword() | !validatePhno() | !validateUserName() )
                 {
