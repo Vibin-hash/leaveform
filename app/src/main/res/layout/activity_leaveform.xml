@@ -59,7 +59,7 @@
                     android:id="@+id/lffrom"
                     android:focusable="false"
                     android:background="@color/grey"
-                    android:layout_width="150dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +75,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/lfto"
                     android:focusable="false"
-                    android:layout_width="150dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 

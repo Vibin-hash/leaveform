@@ -1,17 +1,28 @@
 package com.example.leaveform;
 
 class UserHelperClass {
-    String name,username,email,phoneNo,password;
+    String name;
+    String username;
+    String email;
+    String phoneNo;
+    String password;
+    String designation;
+    String department;
+    String year;
+    String semester;
 
     public UserHelperClass() {
     }
-
-    public UserHelperClass(String name, String username, String email, String phoneNo, String password) {
+    public UserHelperClass(String name, String username, String email, String phoneNo, String password, String designation, String department, String year, String semester) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.phoneNo = phoneNo;
         this.password = password;
+        this.designation = designation;
+        this.department = department;
+        this.year = year;
+        this.semester = semester;
     }
 
     public String getName() {
@@ -52,5 +63,37 @@ class UserHelperClass {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
     }
 }

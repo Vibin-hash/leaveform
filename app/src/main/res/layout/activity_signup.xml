@@ -113,7 +113,53 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"/>
 
+
     </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I am a :"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"/>
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/radiogrp_designation">
+
+                <RadioButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Student"
+                    android:checked="false"
+                    android:id="@+id/rb_student"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:onClick="choiceforUser"
+                    />
+
+                <RadioButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Faculty"
+                    android:checked="false"
+                    android:id="@+id/rb_faculty"
+                    android:layout_weight="1"
+                    android:onClick="choiceforUser"
+                    />
+
+                </RadioGroup>
+
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,7 +174,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="Department : "
                     android:textSize="18sp"
-                    android:paddingLeft="30dp" />
+                    android:paddingStart="30dp" />
 
                 <Spinner
                     android:layout_width="fill_parent"
@@ -136,7 +182,8 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:id="@+id/suspinner1"
+                    android:id="@+id/suspinnerdept"
+                    android:entries="@array/depts"
                     android:background="@drawable/outlineforspinner"/>
             </LinearLayout>
 
@@ -180,6 +227,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:id="@+id/suyearspinner"
+                    android:entries="@array/year"
                     android:layout_gravity="top"
                     android:background="@drawable/outlineforspinner"/>
 
@@ -192,6 +240,7 @@
                     android:paddingRight="20dp"
                     android:layout_marginRight="20dp"
                     android:id="@+id/susemspinner"
+                    android:entries="@array/sems"
                     android:layout_gravity="top"
                     android:background="@drawable/outlineforspinner"
                     />
@@ -199,9 +248,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
-
 
 
     <Button
@@ -223,7 +269,8 @@
         android:text="Already have an account? Sign in."
         android:textAlignment="center"
         android:textSize="16sp"
-        android:textColor="#000"/>
+        android:textColor="#000"
+        android:layout_marginBottom="40dp"/>
 
         </LinearLayout>
     </ScrollView>

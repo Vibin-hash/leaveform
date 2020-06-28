@@ -11,7 +11,7 @@
     android:backgroundTint="#fff">
 
     <TextView
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="60dp"
         android:id="@+id/logo_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,17 +72,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/login_fpbtn"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_margin="5dp"
-            android:background="#00000000"
-            android:elevation="0dp"
-            android:text="Forget Password?" />
-
         <Button
             android:id="@+id/login_loginbtn"
             android:layout_width="match_parent"
@@ -92,6 +81,17 @@
             android:background="#000"
             android:text="GO"
             android:textColor="#fff" />
+        <Button
+            android:id="@+id/login_fpbtn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:background="#00000000"
+            android:elevation="0dp"
+            android:text="Forgot Password?" />
+
+
 
         <Button
             android:id="@+id/login_newuserbtn"

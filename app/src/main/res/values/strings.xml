@@ -9,4 +9,22 @@
         <item>MECH</item>
         <item>IT</item>
     </array>
+
+    <array name="year">
+        <item>I</item>
+        <item>II</item>
+        <item>III</item>
+        <item>IV</item>
+    </array>
+
+    <array name="sems">
+        <item>I</item>
+        <item>II</item>
+        <item>III</item>
+        <item>IV</item>
+        <item>V</item>
+        <item>VI</item>
+        <item>VII</item>
+        <item>VIII</item>
+    </array>
 </resources>

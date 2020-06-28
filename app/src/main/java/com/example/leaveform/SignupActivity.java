@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.os.Trace;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,13 @@ public class SignupActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase rootnode;
     DatabaseReference reference,serialref;
+    RadioButton radioButton;
+    RadioGroup designation;
+
+    String selecteddept,selectedyear,selectedsem,selectedDesignation;
+
+    Spinner deptSpinner,semSpinner,yearSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +64,54 @@ public class SignupActivity extends AppCompatActivity {
         regphno=findViewById(R.id.signup_phno);
         register=findViewById(R.id.reg_btn);
 
+        designation=findViewById(R.id.radiogrp_designation);
+        deptSpinner=findViewById(R.id.suspinnerdept);
+        semSpinner=findViewById(R.id.susemspinner);
+        yearSpinner=findViewById(R.id.suyearspinner);
+
+        deptSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selecteddept=deptSpinner.getItemAtPosition(position).toString();
+                Toast.makeText(SignupActivity.this,selecteddept,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        semSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedsem=semSpinner.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedyear=yearSpinner.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rootnode=FirebaseDatabase.getInstance();
+
 
 
                 reference = rootnode.getReference("users");
@@ -83,8 +138,10 @@ public class SignupActivity extends AppCompatActivity {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     assert user != null;
 
+
+
                                     String userUid=user.getUid();
-                                    UserHelperClass helperClass=new UserHelperClass(name,username,email,phoneno,password);
+                                    UserHelperClass helperClass=new UserHelperClass(name,username,email,phoneno,password,selectedDesignation,selecteddept,selectedyear,selectedsem);
                                     reference.child(userUid).setValue(helperClass);
 
                                     serialref=FirebaseDatabase.getInstance().getReference().child("serialNumber");
@@ -208,4 +265,14 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    public void choiceforUser(View view) {
+        int selectedId = designation.getCheckedRadioButtonId();
+        radioButton = (RadioButton) findViewById(selectedId);
+        if(selectedId==-1){
+            Toast.makeText(SignupActivity.this,"Nothing selected", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            selectedDesignation=radioButton.getText().toString();
+        }
+    }
 }
