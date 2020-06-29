@@ -136,7 +136,7 @@ public class LeaveformActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         strserialNo= dataSnapshot.getValue().toString();
                         d= String.valueOf(Counttheleave.getDifference(dfrom,dto));
-                        diff=Integer.parseInt(d);
+                        diff=Integer.parseInt(d)+1;
 
                         ref=FirebaseDatabase.getInstance().getReference().child("leavehistory");
 
@@ -157,7 +157,6 @@ public class LeaveformActivity extends AppCompatActivity {
                                     temp=Integer.parseInt(leaveCount);
                                     temp=temp+diff;
                                     countRef.setValue(temp);
-
                                 }
 
                                 @Override

@@ -110,16 +110,16 @@ public class SignupActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rootnode=FirebaseDatabase.getInstance();
 
 
-
-                reference = rootnode.getReference("users").child(selectedDesignation);
-
-                if(!validateName() | !validateEmail() | !validatePassword() | !validatePhno() | !validateUserName() )
+                if(!validateName() | !validateEmail() | !validatePassword() | !validatePhno() | !validateUserName() | !validateDesignaton())
                 {
                     return;
                 }
+
+                rootnode=FirebaseDatabase.getInstance();
+                reference = rootnode.getReference("users").child(selectedDesignation);
+
 
                 name =regfullname.getEditText().getText().toString();
                 username=regusername.getEditText().getText().toString();
@@ -146,8 +146,15 @@ public class SignupActivity extends AppCompatActivity {
                                     serialref=FirebaseDatabase.getInstance().getReference().child("serialNumber");
                                     serialref.child(userUid).setValue(0);
 
-                                    startActivity(new Intent(SignupActivity.this,LeaveformActivity.class));
-                                    finish();
+                                    if(selectedDesignation.equals("Student")) {
+                                        startActivity(new Intent(SignupActivity.this, LeaveformActivity.class));
+                                        finish();
+                                    }
+                                    else if(selectedDesignation.equals("Faculty"))
+                                    {
+                                        startActivity(new Intent(SignupActivity.this,FacLeaveApprovalActivity.class));
+                                        finish();
+                                    }
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(SignupActivity.this, "Authentication failed.",
@@ -260,6 +267,19 @@ public class SignupActivity extends AppCompatActivity {
         }
         else {
             regphno.setError(null);
+            return true;
+        }
+    }
+    private Boolean validateDesignaton()
+    {
+        int selectedIdx = designation.getCheckedRadioButtonId();
+        if(selectedIdx==-1)
+        {
+            Toast.makeText(SignupActivity.this,"Select designation", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else
+        {
             return true;
         }
     }
