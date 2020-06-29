@@ -31,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout loginemail,loginpassword;
     FirebaseAuth mAuth;
 
+    DatabaseReference userRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +117,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+
+                                FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+                                String userUid=firebaseUser.getUid();
+
+
+
+
+
                             startActivity(new Intent(LoginActivity.this,LeaveformActivity.class));
                             FirebaseUser user = mAuth.getCurrentUser();
                         } else {

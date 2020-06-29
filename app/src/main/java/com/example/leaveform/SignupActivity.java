@@ -33,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     String name,password,email,username,phoneno;
     FirebaseAuth mAuth;
     FirebaseDatabase rootnode;
-    DatabaseReference reference,serialref;
+    DatabaseReference reference,serialref,emailIdsRef;
     RadioButton radioButton;
     RadioGroup designation;
 
@@ -119,6 +119,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 rootnode=FirebaseDatabase.getInstance();
                 reference = rootnode.getReference("users").child(selectedDesignation);
+                emailIdsRef=rootnode.getReference("emailIds");
 
 
                 name =regfullname.getEditText().getText().toString();
@@ -137,9 +138,10 @@ public class SignupActivity extends AppCompatActivity {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     assert user != null;
 
-
-
                                     String userUid=user.getUid();
+
+                                    emailIdsRef.child(userUid).setValue(selectedDesignation);
+
                                     UserHelperClass helperClass=new UserHelperClass(name,username,email,phoneno,password,selectedDesignation,selecteddept,selectedyear,selectedsem);
                                     reference.child(userUid).setValue(helperClass);
 
