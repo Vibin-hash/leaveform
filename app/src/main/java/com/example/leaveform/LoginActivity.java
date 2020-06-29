@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
+
 public class LoginActivity extends AppCompatActivity {
 
     TextView hello;
@@ -32,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     DatabaseReference userRef;
+
+    String designationtemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,15 +122,36 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 
-                                FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
-                                String userUid=firebaseUser.getUid();
+                            FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+                            assert firebaseUser != null;
+                            String userUid=firebaseUser.getUid();
+
+                            userRef=FirebaseDatabase.getInstance().getReference().child("emailIds").child(userUid);
+                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    designationtemp= (String) dataSnapshot.getValue();
+                                    Toast.makeText(LoginActivity.this,designationtemp,Toast.LENGTH_SHORT).show();
+                                    if(designationtemp.equals("Faculty"))
+                                    {
+                                        startActivity(new Intent(LoginActivity.this,FacLeaveApprovalActivity.class));
+                                        finish();
+                                    }
+                                    else if(designationtemp.equals("Student"))
+                                    {
+                                        startActivity(new Intent(LoginActivity.this,LeaveformActivity.class));
+                                        finish();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
 
 
 
-
-
-                            startActivity(new Intent(LoginActivity.this,LeaveformActivity.class));
-                            FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
