@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Date;
+import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
@@ -20,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,18 +42,19 @@ public class LeaveformActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref,sRef,sRef2,countRef;
     Button save;
-    String strserialNo="1",leaveCount,d;
+    String strserialNo="1",leaveCount,d,reasonForLeave;
     long sno,temp,diff;
 
-
-    LocalDate datefrom,dateTo;
 
     Counttheleave.Date dfrom,dto;
 
     private static final String TAG = "LeaveformActivity";
     private TextInputEditText from,to;
+    private TextInputLayout reason;
     private String fromDate,toDate;
     private DatePickerDialog.OnDateSetListener dateSetListener1,dateSetListener2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,8 @@ public class LeaveformActivity extends AppCompatActivity {
         save=findViewById(R.id.btn_save);
         from=findViewById(R.id.lffrom);
         to=findViewById(R.id.lfto);
+        reason=findViewById(R.id.lf_reason);
+
 
         from.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +125,7 @@ public class LeaveformActivity extends AppCompatActivity {
 
                 toDate=date;
                 to.setText(date);
+
             }
         };
 
@@ -134,47 +143,55 @@ public class LeaveformActivity extends AppCompatActivity {
                 sRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        strserialNo= dataSnapshot.getValue().toString();
-                        d= String.valueOf(Counttheleave.getDifference(dfrom,dto));
-                        diff=Integer.parseInt(d)+1;
 
-                        ref=FirebaseDatabase.getInstance().getReference().child("leavehistory");
-
-                        ref.child(uid).child(strserialNo).child("From").setValue(fromDate);
-                        ref.child(uid).child(strserialNo).child("To").setValue(toDate);
-
-                        sno=Integer.parseInt(strserialNo);
-                        if(sno==0)
-                        {
-                            ref.child(uid).child("Totalleave").setValue(0);
+                        reasonForLeave = reason.getEditText().getText().toString();
+                        strserialNo = dataSnapshot.getValue().toString();
+                        d = String.valueOf(Counttheleave.getDifference(dfrom, dto));
+                        diff = Integer.parseInt(d) + 1;
+                        if (diff <= 0) {
+                            Toast.makeText(LeaveformActivity.this,"Choose the appropriate date",Toast.LENGTH_SHORT).show();
+                        }
+                        else if(reasonForLeave.isEmpty()) {
+                            reason.setError("Enter a reason");
                         }
                         else
-                        {
-                            countRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    leaveCount=dataSnapshot.getValue().toString();
-                                    temp=Integer.parseInt(leaveCount);
-                                    temp=temp+diff;
-                                    countRef.setValue(temp);
-                                }
+                         {
+                             reason.setError(null);
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                            ref = FirebaseDatabase.getInstance().getReference().child("leavehistory");
 
-                                }
-                            });
+
+                            ref.child(uid).child(strserialNo).child("From").setValue(fromDate);
+                            ref.child(uid).child(strserialNo).child("To").setValue(toDate);
+                            ref.child(uid).child(strserialNo).child("Reason").setValue(reasonForLeave);
+
+                            sno = Integer.parseInt(strserialNo);
+                            if (sno == 0) {
+                                ref.child(uid).child("Totalleave").setValue(0);
+                            } else {
+                                countRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        leaveCount = dataSnapshot.getValue().toString();
+                                        temp = Integer.parseInt(leaveCount);
+                                        temp = temp + diff;
+                                        countRef.setValue(temp);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+
+                            sno = sno + 1;
+                            sRef2 = FirebaseDatabase.getInstance().getReference().child("serialNumber");
+                            sRef2.child(uid).setValue(sno);
+                            Toast.makeText(LeaveformActivity.this, d, Toast.LENGTH_SHORT).show();
                         }
 
-
-                        sno=sno+1;
-                        sRef2=FirebaseDatabase.getInstance().getReference().child("serialNumber");
-                        sRef2.child(uid).setValue(sno);
-
-
-                        Toast.makeText(LeaveformActivity.this,d,Toast.LENGTH_SHORT).show();
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
